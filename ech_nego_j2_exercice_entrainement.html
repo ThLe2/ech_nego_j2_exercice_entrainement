@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercice d'entraînement — Jour 2</title>
+<style>
+:root{--prune:#8C1E70;--dark:#5E1349;--light:#F4E6EE;--rose:#C77BAA;--vert:#283C28;--gris:#3C3C3C;--gmoy:#8A7A85;--trame:#E8DCE5;--fond:#FAF6F8;--ok:#2F7A4F;--ko:#B23B3B;--mid:#B5852A}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:Calibri,"Segoe UI",Carlito,Arial,sans-serif;background:var(--fond);color:var(--gris);font-size:16px;line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px 40px}
+header.top{background:var(--dark);color:#fff;padding:22px 0 20px;border-bottom:5px solid var(--rose)}
+header.top .kick{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);font-weight:700}
+header.top h1{margin:6px 0 4px;font-size:28px;line-height:1.2}
+header.top .sub{color:var(--trame);font-style:italic}
+.card{background:#fff;border:1px solid var(--trame);border-radius:10px;padding:20px 22px;margin:18px 0;box-shadow:0 1px 3px rgba(94,19,73,.06)}
+.card h2{margin:0 0 6px;color:var(--dark);font-size:21px}
+.card h3{margin:14px 0 6px;color:var(--prune);font-size:17px}
+.consigne{background:var(--light);border-left:5px solid var(--prune);padding:12px 16px;border-radius:0 8px 8px 0;margin:10px 0 14px}
+.tag{display:inline-block;background:var(--light);color:var(--prune);font-weight:700;font-size:12px;padding:2px 9px;border-radius:20px;margin-right:6px}
+.item{display:grid;grid-template-columns:1fr 290px;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--trame)}
+.item:first-of-type{border-top:0}
+.item .q{font-weight:600}
+select,input[type=text],textarea{font:inherit;color:var(--gris);border:1.5px solid var(--trame);border-radius:7px;padding:8px 10px;background:#fff;width:100%}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--rose);border-color:var(--prune)}
+textarea{min-height:130px;resize:vertical}
+select.ok{border-color:var(--ok);background:#eef7f1}select.ko{border-color:var(--ko);background:#fbeeee}
+.fb{grid-column:1/-1;font-size:14px;padding:8px 12px;border-radius:7px;display:none}
+.fb.show{display:block}.fb.ok{background:#eef7f1;border-left:4px solid var(--ok)}.fb.ko{background:#fbeeee;border-left:4px solid var(--ko)}
+.btn{font:inherit;font-weight:700;border:0;border-radius:8px;padding:11px 20px;cursor:pointer;background:var(--prune);color:#fff}
+.btn:hover{background:var(--dark)}
+.btn[disabled]{background:#cbbfc7;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--prune);border:2px solid var(--prune)}
+.btn.done{background:var(--ok)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.score{font-weight:700;color:var(--dark)}
+.pill{display:inline-block;padding:4px 12px;border-radius:20px;background:var(--light);color:var(--prune);font-weight:700}
+.progress{height:8px;background:var(--trame);border-radius:6px;overflow:hidden;margin:10px 0}
+.progress>div{height:100%;background:var(--prune);width:0;transition:width .3s}
+table.t{width:100%;border-collapse:collapse;font-size:14.5px;margin:8px 0}
+table.t th{background:var(--dark);color:#fff;text-align:left;padding:8px}
+table.t td{border-bottom:1px solid var(--trame);padding:8px;vertical-align:top}
+table.t tr:nth-child(even) td{background:var(--fond)}
+.muted{color:var(--gmoy);font-size:14px}
+.big{font-size:44px;font-weight:800;color:var(--prune);line-height:1}
+.hidden{display:none!important}
+footer.foot{text-align:center;color:var(--gmoy);font-size:12px;padding:20px 0}
+.warn{background:#fff7e8;border-left:5px solid var(--mid);padding:10px 14px;border-radius:0 8px 8px 0}
+.counter{font-size:13px;color:var(--gmoy);text-align:right}
+@media (max-width:700px){.item{grid-template-columns:1fr}header.top h1{font-size:23px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="kick">TMK Performances · Eco Conso Habitat — Négociation et argumentation · Jour 2</div><h1>Exercice d'entraînement — Jour 2</h1><div class="sub">Faire face aux situations difficiles · 4 ateliers</div></div></header>
+<main class="wrap">
+
+<div class="card"><div class="consigne"><b>Exercice d'entraînement, non noté.</b> Réalisez chaque atelier à la fin de la séquence indiquée. Quand vous validez un atelier, vos réponses sont <b>figées</b> et la correction s'affiche : impossible de les modifier ensuite. Gardez cette page ouverte toute la journée : si vous la rouvrez sur le même poste, vos ateliers déjà validés sont conservés. Pour tout recommencer, utilisez « Rejouer tout l'exercice ».</div>
+<div class="row" style="justify-content:space-between"><span>Ateliers validés : <span class="pill" id="nbv">0 / 4</span></span><span>Score cumulé : <span class="pill" id="tot">—</span></span></div>
+<div class="progress"><div id="bar"></div></div></div>
+<div id="ateliers"></div>
+<div class="card"><div class="row" style="justify-content:center"><button class="btn sec" id="replay">Rejouer tout l'exercice</button></div></div>
+</main>
+<footer class="foot">TMK Performances - N° Siret : 49841924100027 - Code NAF : 8559A</footer>
+<script>
+
+var DATA=[{"seq": "S02", "titre": "Atelier A1 — Reconnaître les pressions", "consigne": "Pour chaque phrase du client, indiquez la pression utilisée.", "options": ["Fait accompli", "Urgence factice", "Petit pas après petit pas", "Bon flic / mauvais flic"], "items": [{"txt": "« On a déjà décidé avec mon mari : voici nos conditions. »", "c": 0, "e": "La décision est présentée comme acquise pour éviter de négocier."}, {"txt": "« J'ai un autre rendez-vous ce soir : c'est maintenant ou jamais. »", "c": 1, "e": "Une urgence créée pour vous faire renoncer à votre porte de sortie."}, {"txt": "« D'accord pour la garantie… et juste un geste sur le paiement, alors. »", "c": 2, "e": "Une petite concession, puis une autre : à la fin, tout est lâché."}, {"txt": "Lui : « C'est hors de question. » Elle : « Moi je vous comprends ; faites un effort et je le convaincs. »", "c": 3, "e": "L'un est dur, l'autre fait semblant d'être de votre côté."}, {"txt": "« L'autre installateur attend ma réponse avant 18 h. »", "c": 1, "e": "Pression du temps : rappeler l'enjeu et proposer du temps."}, {"txt": "« C'est réglé de notre côté : 12 000 € tout compris, sinon rien. »", "c": 0, "e": "Fait accompli : reconnaître, puis rouvrir la discussion."}, {"txt": "« Et puis tant qu'on y est, la pose avant Noël, ce serait bien aussi. »", "c": 2, "e": "Encore une demande : comptabiliser et demander une contrepartie."}, {"txt": "« Mon associé est intraitable, mais moi je peux plaider votre cause si vous baissez un peu. »", "c": 3, "e": "Le « gentil » relaie la pression du « méchant » : ne pas prendre parti."}], "bonus": {"txt": "Face au petit pas après petit pas, quelle est la bonne réaction ?", "options": ["Accepter pour ne pas fâcher le client", "Récapituler ce qui a déjà été accordé et demander une contrepartie", "Refuser sèchement toute nouvelle demande", "Changer de sujet"], "c": 1, "e": "Comptabiliser : « j'ai déjà accepté A et B… », puis donnant-donnant."}}, {"seq": "S03", "titre": "Atelier A2 — Argumenter et débloquer", "consigne": "Pour chaque réaction du commercial, indiquez si c'est une bonne ou une mauvaise réponse.", "options": ["Bonne réponse", "Mauvaise réponse"], "items": [{"txt": "« C'est trop cher. » — « On est dans les prix du marché. »", "c": 1, "e": "Justifier le prix par le prix : on parle de l'entreprise, pas du client."}, {"txt": "« C'est trop cher. » — « J'entends que le prix compte pour vous. Si je comprends bien, vous voulez être sûr que la dépense en vaut la peine : regardons ensemble ce que vous ne paierez plus en fioul. »", "c": 0, "e": "Reconnaître, reformuler, ramener au bénéfice client."}, {"txt": "« C'est trop cher. » — « Notre marge est déjà très faible. »", "c": 1, "e": "Le coût de l'entreprise n'intéresse pas le client."}, {"txt": "« Ailleurs, c'est moins cher. » — « Avant de répondre, j'aimerais comprendre ce que couvre l'autre devis. »", "c": 0, "e": "Comparer la valeur globale avant de parler prix."}, {"txt": "Le client répète pour la troisième fois la même objection : le commercial hausse le ton pour le convaincre.", "c": 1, "e": "Le forcing aggrave toujours le blocage."}, {"txt": "La cliente se ferme, bras croisés : « Qu'est-ce qui vous inquiète, vous ? » puis un silence.", "c": 0, "e": "Question ouverte douce et pause : on crée l'espace pour qu'elle parle."}, {"txt": "La discussion tourne en rond : « Et si on regardait plutôt ce que vous payez chaque hiver aujourd'hui ? »", "c": 0, "e": "Changer de cadre pour relancer."}, {"txt": "L'agacement monte des deux côtés : le commercial accorde une remise pour en finir.", "c": 1, "e": "Céder pour sortir du blocage, c'est perdre de la marge et de la crédibilité. Mieux : proposer de se revoir."}], "bonus": {"txt": "Dans quel ordre s'enchaîne la méthode pour ramener au bénéfice ?", "options": ["Ramener, reconnaître, reformuler", "Reformuler, ramener, reconnaître", "Reconnaître, reformuler, ramener", "Reconnaître, ramener, reformuler"], "c": 2, "e": "Reconnaître (« j'entends… »), reformuler (« si je comprends bien… »), ramener (« et c'est justement pour cela… »)."}}, {"seq": "S04", "titre": "Atelier A3 — Mes parades", "consigne": "M. Toussaint a un devis 12 % moins cher et menace de signer ailleurs. Pour chaque ligne de la préparation, indiquez la case du gabarit de parades à laquelle elle correspond.", "options": ["1. Pressions probables", "2. Réponses-types", "3. Bénéfices à ramener", "4. Posture de fond"], "items": [{"txt": "« Moins cher ailleurs », « alignez-vous », « c'est aujourd'hui ou jamais ».", "c": 0, "e": "Ce que le client va probablement utiliser."}, {"txt": "Comprendre ce que couvre l'autre devis avant de répondre.", "c": 1, "e": "Une logique de réponse, pas une réplique apprise."}, {"txt": "Le suivi du dossier d'aides, les garanties, la mise en service, le suivi après la pose.", "c": 2, "e": "Les bénéfices concrets à rappeler pour revenir au positif."}, {"txt": "Écoute partagée avec fermeté : je comprends, je ne lâche pas le prix.", "c": 3, "e": "La posture tenue pendant tout le rendez-vous."}, {"txt": "« Je ne vais pas m'aligner ; en revanche, je peux vous expliquer ce qui justifie la différence. »", "c": 1, "e": "Réponse-type face à « alignez-vous »."}, {"txt": "Être prêt à perdre cette vente sans casser la relation.", "c": 3, "e": "C'est ce qui permet de tenir le prix."}, {"txt": "« Prenez le temps de comparer ligne à ligne : je repasse dans 48 h. »", "c": 1, "e": "Réponse-type face à l'urgence : inverser la pression."}], "bonus": {"txt": "Pourquoi préparer ses parades avant le rendez-vous ?", "options": ["Pour réciter des répliques par cœur", "Parce qu'une parade improvisée fond sous la pression", "Pour éviter d'écouter le client", "Pour pouvoir baisser le prix plus vite"], "c": 1, "e": "Une parade préparée tient sous pression ; une parade improvisée fond."}}, {"seq": "S05", "titre": "Atelier A4 — Tenir sous pression", "consigne": "Pour chaque réponse du commercial, indiquez ce qu'il fait face à la pression.", "options": ["Tient la ligne", "Cède à la pression", "Contre-attaque (combat)"], "items": [{"txt": "« Bon, d'accord, je vous fais 5 % si vous signez tout de suite. »", "c": 1, "e": "Un geste lié à l'urgence : le client pense que le prix était gonflé."}, {"txt": "« Si vous préférez l'autre installateur, allez-y, ce n'est pas mon problème. »", "c": 2, "e": "Le combat casse la relation."}, {"txt": "« J'entends que le délai compte. Vous vous engagez pour dix ans : prenez le temps de comparer, je vous rappelle demain à 10 h. »", "c": 0, "e": "Calme, rappel de l'enjeu client, temps proposé."}, {"txt": "« Je récapitule : l'entretien et l'échéancier sont acquis. Pour la date de pose, que pouvez-vous faire de votre côté ? »", "c": 0, "e": "Comptabiliser et demander une contrepartie."}, {"txt": "« Vos quatre demandes ? D'accord pour tout. »", "c": 1, "e": "Accepter tout casse l'entreprise : il faut trier ce qui compte vraiment."}, {"txt": "« Vous ne savez pas ce que vous voulez ! »", "c": 2, "e": "S'énerver, c'est laisser le client gagner."}, {"txt": "« Ma proposition est la même pour vous deux ; regardons ensemble ce qui compte pour chacun. »", "c": 0, "e": "Face au bon flic / mauvais flic : ne pas prendre parti, garder le cap."}], "bonus": {"txt": "La cliente ne dit presque plus rien depuis deux minutes. Que faites-vous ?", "options": ["J'accélère pour conclure", "Je baisse le prix pour la débloquer", "Je pose une question ouverte douce et je laisse le silence s'installer", "Je mets fin au rendez-vous"], "c": 2, "e": "Patience et question ouverte bienveillante : on crée la sécurité pour qu'elle parle."}}];
+var KEY='ECH_NEGO_ex_'+"J2";
+function blank(){return DATA.map(function(){return {done:false,score:0,max:0,ans:null};});}
+function loadS(){try{var s=JSON.parse(localStorage.getItem(KEY));if(s&&s.length===DATA.length)return s;}catch(e){}return blank();}
+function saveS(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+var state=loadS();
+function h(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+function render(){
+  var root=document.getElementById('ateliers');root.innerHTML='';
+  DATA.forEach(function(a,ai){
+    var items=a.items.map(function(it){return {txt:it.txt,options:a.options,c:it.c,e:it.e};});
+    if(a.bonus) items.push({txt:a.bonus.txt,options:a.bonus.options,c:a.bonus.c,e:a.bonus.e,bonus:true});
+    var html='<div class="card" id="at'+ai+'"><span class="tag">'+h(a.seq)+'</span><h2>'+h(a.titre)+'</h2><div class="consigne">'+h(a.consigne)+'</div>';
+    items.forEach(function(it,ii){
+      html+='<div class="item"><div class="q">'+(it.bonus?'<span class="tag">Question finale</span>':'')+h(it.txt)+'</div><select data-a="'+ai+'" data-i="'+ii+'"><option value="">— Choisir —</option>'+it.options.map(function(o,oi){return '<option value="'+oi+'">'+h(o)+'</option>';}).join('')+'</select><div class="fb" id="fb'+ai+'_'+ii+'"></div></div>';
+    });
+    html+='<div class="row"><button class="btn" id="val'+ai+'" disabled>Valider l\'atelier</button><span class="score" id="sc'+ai+'"></span></div></div>';
+    root.insertAdjacentHTML('beforeend',html);
+    var sels=root.querySelectorAll('#at'+ai+' select'), btn=document.getElementById('val'+ai);
+    sels.forEach(function(s){s.addEventListener('change',function(){btn.disabled=Array.prototype.some.call(sels,function(x){return x.value==='';});});});
+    function validate(){
+      var ok=0;
+      items.forEach(function(it,ii){
+        var s=sels[ii], good=Number(s.value)===it.c, fb=document.getElementById('fb'+ai+'_'+ii);
+        s.classList.add(good?'ok':'ko'); s.disabled=true; if(good) ok++;
+        fb.className='fb show '+(good?'ok':'ko');
+        fb.innerHTML=(good?'<b>Exact.</b> ':'<b>Non. Bonne réponse : '+h(it.options[it.c])+'.</b> ')+h(it.e);
+      });
+      state[ai]={done:true,score:ok,max:items.length,ans:Array.prototype.map.call(sels,function(x){return x.value;})};
+      btn.disabled=true; btn.textContent='Atelier validé'; btn.classList.add('done');
+      document.getElementById('sc'+ai).textContent=ok+' / '+items.length+' bonnes réponses';
+      saveS(); recap();
+    }
+    btn.addEventListener('click',validate);
+    if(state[ai].done&&state[ai].ans){state[ai].ans.forEach(function(v,ii){if(sels[ii])sels[ii].value=v;});validate();}
+  });
+  recap();
+}
+function recap(){
+  var d=state.filter(function(s){return s.done;}), sc=d.reduce(function(a,s){return a+s.score;},0), mx=d.reduce(function(a,s){return a+s.max;},0);
+  document.getElementById('nbv').textContent=d.length+' / '+DATA.length;
+  document.getElementById('tot').textContent=mx?sc+' / '+mx:'—';
+  document.getElementById('bar').style.width=(100*d.length/DATA.length)+'%';
+}
+document.getElementById('replay').addEventListener('click',function(){ if(confirm('Tout recommencer ? Toutes vos réponses seront effacées.')){state=blank();saveS();render();window.scrollTo(0,0);} });
+render();
+</script>
+</body>
+</html>
